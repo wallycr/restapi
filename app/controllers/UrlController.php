@@ -10,12 +10,19 @@ class UrlController extends \BaseController {
 	public function index()
 	{
 	    $urls = Url::where('user_id', Auth::user()->id)->get();
-	 
-	    return Response::json(array(
-	        'error' => false,
+
+	    if(is_null($urls)){
+			return Response::json(array(
+	        'success' => false,
+	        'error_code' => 'XXX' ,
+	        'error_msg' => 'ERROR_MESSAGE'),
+	        200);
+	    } else {
+			return Response::json(array(
+	        'success' => true,
 	        'urls' => $urls->toArray()),
-	        200
-	    );
+	        200);
+	    }
 	}
 
 
@@ -48,7 +55,7 @@ class UrlController extends \BaseController {
 	    $url->save();
 	 
 	    return Response::json(array(
-	        'error' => false,
+	        'success' => true,
 	        'urls' => $urls->toArray()),
 	        200
 	    );
@@ -61,19 +68,29 @@ class UrlController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($id = null)
 	{
 	    // Make sure current user owns the requested resource
 	    $url = Url::where('user_id', Auth::user()->id)
 	            ->where('id', $id)
 	            ->take(1)
 	            ->get();
-	 
-	    return Response::json(array(
-	        'error' => false,
+
+	            return $url;
+
+	    if($url==[]){
+			return Response::json(array(
+	        'success' => false,
+	        'error_code' => 'XXX' ,
+	        'error_msg' => 'ERROR_MESSAGE'),
+	        200);
+	    } else {
+			return Response::json(array(
+	        'success' => true,
 	        'urls' => $url->toArray()),
-	        200
-	    );
+	        200);
+	    }
+
 	}
 
 
@@ -112,7 +129,7 @@ class UrlController extends \BaseController {
 	    $url->save();
 	 
 	    return Response::json(array(
-	        'error' => false,
+	        'success' => true,
 	        'message' => 'url updated'),
 	        200
 	    );
@@ -132,7 +149,7 @@ class UrlController extends \BaseController {
 	    $url->delete();
 	 
 	    return Response::json(array(
-	        'error' => false,
+	        'success' => true,
 	        'message' => 'url deleted'),
 	        200
 	        );

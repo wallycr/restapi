@@ -13,7 +13,7 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return View::make('index');
 });
 Route::get('/authtest', array('before' => 'auth.basic', function()
 {
